@@ -21,6 +21,7 @@
 //   TCS34005 = addr 0x29, VCC i2c pullup
 //   TCS34007 = addr 0x29, 1.8V i2c pullup
 //
+
 const uint8_t TCS3400_I2C_ADDR_13 = 0x39;
 const uint8_t TCS3400_I2C_ADDR_57 = 0x39;
 
@@ -66,6 +67,7 @@ class TCS3400 {
       GAIN_64X = 0x03,
     };
 
+	const float ms_cycle = 2.78;
     TCS3400(void);
     bool begin(uint8_t i2c_addr=TCS3400_I2C_ADDR_13);
 
@@ -75,11 +77,23 @@ class TCS3400 {
     uint16_t getVisible(void);
     uint16_t getIR(void);
 
+    uint16_t getOneShotRed(void);
+    uint16_t getOneShotGreen(void);
+    uint16_t getOneShotBlue(void);
+    uint16_t getOneShotVisible(void);
+    uint16_t getOneShotIR(void);
+
+
     void setIntegrationTime(enum integrationTime);
     void setGain(enum gain);
 
     void setClearModeVisible(void);
     void setClearModeIR(void);
+    void enableVisible(void);
+    void enableIR(void);
+    void enable(void);
+    void disable(void);
+	
 
   protected:
     bool clear_is_visible = true;
@@ -89,6 +103,7 @@ class TCS3400 {
     uint16_t chan_ir = 0;
     uint16_t chan_vis = 0;
     uint8_t addr = 0;
+	enum integrationTime integration=INTG_TIME_1_CYCLES;
 
     void setPowerOn(void);
     void setPowerOff(void);

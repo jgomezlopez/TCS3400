@@ -66,6 +66,74 @@ uint16_t TCS3400::getIR() {
   return this->read_word(TCS3400_REG_C_L);
 }
 
+void TCS3400::enable () {
+	this->setPowerOn();
+	delay(3);
+	this->setADCOn();
+	delay(((int)((256-(int)integration)* this->ms_cycle))+1);
+}
+
+void TCS3400::enableVisible () {
+	this->setPowerOn();
+	delay(3);
+	this->setClearModeVisible();
+	this->setADCOn();
+	delay(((int)((256-(int)integration)* this->ms_cycle))+1);
+}
+
+void TCS3400::enableIR () {
+	this->setPowerOn();
+	delay(3);
+	this->setClearModeIR();
+	this->setADCOn();
+	delay(((int)((256-(int)integration)* this->ms_cycle))+1);
+}
+
+void TCS3400::disable () {
+	this->setADCOff();
+	this->setPowerOff();
+}
+
+uint16_t TCS3400::getOneShotRed() {
+  this->enable();
+  while (!this->isDataValid()) ;
+  uint16_t low = this->read_word(TCS3400_REG_R_L);
+  uint16_t high = this->read_word(TCS3400_REG_R_H);
+  this->disable();
+}
+
+uint16_t TCS3400::getOneShotGreen() {
+  this->enable();
+  while (!this->isDataValid()) ;
+  uint16_t low = this->read_word(TCS3400_REG_G_L);
+  uint16_t high = this->read_word(TCS3400_REG_G_H);
+  this->disable();
+}
+
+uint16_t TCS3400::getOneShotBlue() {
+  this->enable();
+  while (!this->isDataValid()) ;
+  uint16_t low = this->read_word(TCS3400_REG_B_L);
+  uint16_t high = this->read_word(TCS3400_REG_B_H);
+  this->disable();
+}
+
+uint16_t TCS3400::getOneShotVisible() {
+  this->enableVisible();
+  while (!this->isDataValid()) ;
+  uint16_t low = this->read_word(TCS3400_REG_C_L);
+  uint16_t high = this->read_word(TCS3400_REG_C_H);
+  this->disable();
+}
+
+uint16_t TCS3400::getOneShotIR() {
+  this->enableIR();
+  while (!this->isDataValid()) ;
+  uint16_t low = this->read_word(TCS3400_REG_C_L);
+  uint16_t high = this->read_word(TCS3400_REG_C_H);
+  this->disable();
+}
+
 bool TCS3400::isDataValid() {
   return TCS3400_STATUS_AVALID & this->read_byte(TCS3400_REG_STATUS);
 }
@@ -76,6 +144,7 @@ uint8_t TCS3400::getDeviceId(void) {
 
 void TCS3400::setIntegrationTime(enum integrationTime it) {
   this->write_byte(TCS3400_REG_ATIME, (uint8_t)it);
+  this->_integration = it;
 }
 
 void TCS3400::setGain(enum gain g) {
