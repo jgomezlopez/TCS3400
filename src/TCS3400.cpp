@@ -144,7 +144,7 @@ uint8_t TCS3400::getDeviceId(void) {
 
 void TCS3400::setIntegrationTime(enum integrationTime it) {
   this->write_byte(TCS3400_REG_ATIME, (uint8_t)it);
-  this->_integration = it;
+  this->integration = it;
 }
 
 void TCS3400::setGain(enum gain g) {
