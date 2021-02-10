@@ -115,6 +115,7 @@ class TCS3400 {
     uint8_t read_byte(uint8_t reg);
     void write_byte(uint8_t reg, uint8_t value);
     uint16_t read_word(uint8_t reg);
+	uint16_t bytes_combine(uint8_t, uint8_t);
 
 };
 

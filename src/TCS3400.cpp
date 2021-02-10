@@ -15,6 +15,15 @@
 TCS3400::TCS3400() {
 }
 
+uint16_t TCS3400::bytes_combine( uint8_t x_high, uint8_t x_low)
+{
+  uint16_t res;
+  res = x_high;              
+  res = res<<8;         
+  res |= x_low;              
+  return res;
+}
+
 bool TCS3400::begin(uint8_t i2c_addr) {
 
   Wire.begin();
@@ -100,6 +109,8 @@ uint16_t TCS3400::getOneShotRed() {
   uint16_t low = this->read_word(TCS3400_REG_R_L);
   uint16_t high = this->read_word(TCS3400_REG_R_H);
   this->disable();
+  return this->bytes_combine( high, low);
+  
 }
 
 uint16_t TCS3400::getOneShotGreen() {
@@ -108,6 +119,7 @@ uint16_t TCS3400::getOneShotGreen() {
   uint16_t low = this->read_word(TCS3400_REG_G_L);
   uint16_t high = this->read_word(TCS3400_REG_G_H);
   this->disable();
+  return this->bytes_combine( high, low);
 }
 
 uint16_t TCS3400::getOneShotBlue() {
@@ -116,6 +128,7 @@ uint16_t TCS3400::getOneShotBlue() {
   uint16_t low = this->read_word(TCS3400_REG_B_L);
   uint16_t high = this->read_word(TCS3400_REG_B_H);
   this->disable();
+  return this->bytes_combine( high, low);
 }
 
 uint16_t TCS3400::getOneShotVisible() {
@@ -124,6 +137,7 @@ uint16_t TCS3400::getOneShotVisible() {
   uint16_t low = this->read_word(TCS3400_REG_C_L);
   uint16_t high = this->read_word(TCS3400_REG_C_H);
   this->disable();
+  return this->bytes_combine( high, low);
 }
 
 uint16_t TCS3400::getOneShotIR() {
@@ -132,6 +146,7 @@ uint16_t TCS3400::getOneShotIR() {
   uint16_t low = this->read_word(TCS3400_REG_C_L);
   uint16_t high = this->read_word(TCS3400_REG_C_H);
   this->disable();
+  return this->bytes_combine( high, low);
 }
 
 bool TCS3400::isDataValid() {
